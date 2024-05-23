@@ -21,6 +21,7 @@ const nes = new NES({
 
 const audioContext = new AudioContext();
 let audioBuffer = [];
+let saveState = null;
 
 setInterval(() => {
     if (audioBuffer.length > 0) {
@@ -49,8 +50,43 @@ document.getElementById('rom-input').addEventListener('change', function(event) 
     reader.onload = function() {
         let data = new Uint8Array(reader.result);
         nes.loadROM(data);
-        nes.start();
     };
     
     reader.readAsArrayBuffer(file);
+});
+
+document.getElementById('start-button').addEventListener('click', function() {
+    nes.start();
+});
+
+document.getElementById('save-state').addEventListener('click', function() {
+    saveState = nes.toJSON();
+    alert("State saved!");
+});
+
+document.getElementById('load-state').addEventListener('click', function() {
+    if (saveState) {
+        nes.fromJSON(saveState);
+        alert("State loaded!");
+    } else {
+        alert("No state saved.");
+    }
+});
+
+document.getElementById('toggle-memory-editor').addEventListener('click', function() {
+    let memoryEditor = document.getElementById('memory-editor');
+    memoryEditor.style.display = memoryEditor.style.display === 'none' ? 'block' : 'none';
+    if (memoryEditor.style.display === 'block') {
+        document.getElementById('memory-textarea').value = JSON.stringify(nes.cpu.mem, null, 2);
+    }
+});
+
+document.getElementById('apply-memory').addEventListener('click', function() {
+    try {
+        let newMemory = JSON.parse(document.getElementById('memory-textarea').value);
+        nes.cpu.mem.set(newMemory);
+        alert("Memory updated!");
+    } catch (e) {
+        alert("Failed to update memory: " + e.message);
+    }
 });
