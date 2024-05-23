@@ -4,10 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NES Emulator</title>
+    <style>
+        #controls {
+            margin-top: 10px;
+        }
+        #memory-editor {
+            margin-top: 10px;
+            display: none;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+    </style>
 </head>
 <body>
     <canvas id="nes-canvas" width="256" height="240"></canvas>
-    <input type="file" id="rom-input" accept=".nes" />
+    <div id="controls">
+        <input type="file" id="rom-input" accept=".nes" />
+        <button id="start-button">Start</button>
+        <button id="save-state">Save State</button>
+        <button id="load-state">Load State</button>
+        <button id="toggle-memory-editor">Toggle Memory Editor</button>
+    </div>
+    <div id="memory-editor">
+        <textarea id="memory-textarea"></textarea>
+        <button id="apply-memory">Apply Memory Changes</button>
+    </div>
     <script src="/index.js"></script>
 </body>
 </html>
